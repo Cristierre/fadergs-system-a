@@ -59,8 +59,6 @@ namespace CadastrodeClientes
         }
 
         private void btnSalvar_Click(object sender, EventArgs e) {
-            Clientes clientes = new Clientes();
-
             string estadoCivil = "";
             try {
                 estadoCivil = ObterEstadoCivil();
@@ -69,9 +67,10 @@ namespace CadastrodeClientes
             }
 
             _sexo = Util.ObterSexoSelecionado(this.gbSexo);
-            if (Valido()) Salvar();
-
-            clientes = null;
+            if (Valido()) {
+                Salvar();
+                ExportarCVS();
+            }
         }
 
         private void btnExcluir_Click(object sender, EventArgs e) {
@@ -102,10 +101,7 @@ namespace CadastrodeClientes
         }
 
         private void btnExportarCSV_Click(object sender, EventArgs e) {
-            Clientes clientes = new Clientes();
-            clientes.ExportarListParaCSV();
-
-            clientes = null;
+            ExportarCVS();
         }
 
         #region Metodos
@@ -185,7 +181,15 @@ namespace CadastrodeClientes
             listaClientes = null;
         }
 
+        private void ExportarCVS() {
+            Clientes clientes = new Clientes();
+            clientes.ExportarListParaCSV();
+
+            clientes = null;
+        }
+
         private void Limpar() {
+            this.IdCliente = 0;
             this.EstadoCivil = "";
             txtNome.Clear();
             mtxtDataNascimento.Clear();
@@ -205,6 +209,7 @@ namespace CadastrodeClientes
             txtTelefone2.Clear();
             txtCelular1.Clear();
             txtCelular2.Clear();
+            lblDataRegistro.Text = "";
         }
 
         #endregion

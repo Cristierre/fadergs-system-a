@@ -1,4 +1,5 @@
-﻿using CadastroClientes.Entidades;
+﻿using CadastroClientes.Aplicacao;
+using CadastroClientes.Entidades;
 using CsvHelper;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,10 @@ namespace CadastroClientes
     public class Arquivos
     {
         public void ExportarListaParaCSV<T>(List<T> listaObj) {
-            var csvArquivoCaminho = Path.Combine(Environment.CurrentDirectory, "ListaClientes.csv");
+            var dataHora = Util.ObterDataAtual();
+            var dataHoraFormatoCSV = dataHora.ToString("yyyyMMddhhmmss");
+            var nomeArquivo = $"ListaClientes{dataHoraFormatoCSV}.csv";
+            var csvArquivoCaminho = Path.Combine(Environment.CurrentDirectory, nomeArquivo);
 
             using (FileStream fileStream = new FileStream(csvArquivoCaminho, FileMode.OpenOrCreate)) {
                 using (var writer = new StreamWriter(fileStream, Encoding.GetEncoding("ISO-8859-1")))
