@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace CadastroClientes.Entidades
 {
@@ -19,10 +20,7 @@ namespace CadastroClientes.Entidades
         public string Logradouro { get; set; }
         public string Complemento { get; set; }
         public int Numero { get; set; }
-        public long TelefoneFixo1 { get; set; }
-        public long TelefoneFixo2 { get; set; }
-        public long Celular1 { get; set; }
-        public long Celular2 { get; set; }
+        public List<string> listaTelefones { get; set; }      
         public DateTime DataRegistro { get; set; }
     }
 }

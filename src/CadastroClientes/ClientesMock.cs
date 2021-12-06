@@ -31,10 +31,15 @@ namespace CadastroClientes
             cliente.Logradouro = logradouro;
             cliente.Complemento = complemento;
             cliente.Numero = numero;
-            cliente.TelefoneFixo1 = telefone1;
-            cliente.TelefoneFixo2 = telefone2;
-            cliente.Celular1 = celular1;
-            cliente.Celular2 = celular2;
+            cliente.listaTelefones.Add(telefone1.ToString());
+            cliente.listaTelefones.Add(telefone2.ToString());
+            cliente.listaTelefones.Add(celular1.ToString());
+            cliente.listaTelefones.Add(celular2.ToString());
+
+            //cliente.TelefoneFixo1 = telefone1;
+            //cliente.TelefoneFixo2 = telefone2;
+            //cliente.Celular1 = celular1;
+            //cliente.Celular2 = celular2;
             cliente.DataRegistro = Util.ObterDataAtual();
 
             return cliente;

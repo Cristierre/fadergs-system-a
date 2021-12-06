@@ -1,6 +1,5 @@
 ﻿using CadastroClientes.AcessoDados.BancoSql;
 using CadastroClientes.Entidades;
-using CadastroClientes.AcessoDados;
 using System.Collections.Generic;
 using System.Data;
 using System;
@@ -12,9 +11,9 @@ namespace CadastroClientes.AcessoDados.Repositorio
         private BDMySql _mySql = new BDMySql();
         private string _comandoSql;
 
-        public void Salvar(Cliente cliente) {
+        public void Salvar(Cliente cliente) {           
             var campos = "INSERT INTO Clientes (NomeCompleto, DataNascimento, EstadoCivil, Sexo, RG, CPF, Pais, Estado, Cidade, Bairro, CEP, Logradouro, Complemento, Numero, TelefoneFixo1, TelefoneFixo2, Celular1, Celular2, DataRegistro) ";
-            var valores = $"VALUES ('{cliente.NomeCompleto}','{cliente.DataNascimento.ToString("yyyy-MM-dd")}','{cliente.EstadoCivil}','{cliente.Sexo.Substring(0, 1)}','{cliente.RG}','{cliente.CPF}','{cliente.Pais}','{cliente.Estado}','{cliente.Cidade}','{cliente.Bairro}','{cliente.CEP}','{cliente.Logradouro}','{cliente.Complemento}','{cliente.Numero}','{cliente.TelefoneFixo1}','{cliente.TelefoneFixo2}','{cliente.Celular1}','{cliente.Celular2}','{cliente.DataRegistro.ToString("yyyy-MM-dd")}')";
+            var valores = $"VALUES ('{cliente.NomeCompleto}','{cliente.DataNascimento.ToString("yyyy-MM-dd")}','{cliente.EstadoCivil}','{cliente.Sexo.Substring(0, 1)}','{cliente.RG}','{cliente.CPF}','{cliente.Pais}','{cliente.Estado}','{cliente.Cidade}','{cliente.Bairro}','{cliente.CEP}','{cliente.Logradouro}','{cliente.Complemento}','{cliente.Numero}','{cliente.listaTelefones[0]}','{cliente.listaTelefones[1]}','{cliente.listaTelefones[2]}','{cliente.listaTelefones[3]}','{cliente.DataRegistro.ToString("yyyy-MM-dd")}')";
 
             _comandoSql = campos + valores;
             _mySql.Executar(_comandoSql);
@@ -36,11 +35,11 @@ namespace CadastroClientes.AcessoDados.Repositorio
                         "Logradouro = '" + cliente.Logradouro + "'," +
                         "Complemento = '" + cliente.Complemento + "'," +
                         "Numero = '" + cliente.Numero + "'," +
-                        "TelefoneFixo1 = '" + cliente.TelefoneFixo1 + "'," +
-                        "TelefoneFixo2 = '" + cliente.TelefoneFixo2 + "'," +
-                        "Celular1 = '" + cliente.Celular1 + "'," +
-                        "Celular2 = '" + cliente.Celular2 + "'" +
-                       " WHERE Id = " + cliente.Id;           
+                        "TelefoneFixo1 = '" + cliente.listaTelefones[0] + "'," +
+                        "TelefoneFixo2 = '" + cliente.listaTelefones[1] + "'," +
+                        "Celular1 = '" + cliente.listaTelefones[2] + "'," +
+                        "Celular2 = '" + cliente.listaTelefones[3] + "'" +
+                       " WHERE Id = " + cliente.Id;
             _mySql.Executar(_comandoSql);
         }
 
@@ -58,6 +57,7 @@ namespace CadastroClientes.AcessoDados.Repositorio
 
             foreach (DataRow row in dataTable.Rows) {
                 Cliente cliente = new Cliente();
+                List<string>  listaTelefones = new List<string>();
 
                 cliente.Id = int.Parse(GetValueRow(row, "Id"));
                 cliente.NomeCompleto = GetValueRow(row, "NomeCompleto");
@@ -74,11 +74,14 @@ namespace CadastroClientes.AcessoDados.Repositorio
                 cliente.Logradouro = GetValueRow(row, "Logradouro");
                 cliente.Complemento = GetValueRow(row, "Complemento");
                 cliente.Numero = int.Parse(GetValueRow(row, "Numero"));
-                cliente.TelefoneFixo1 = long.Parse(GetValueRow(row, "TelefoneFixo1"));
-                cliente.TelefoneFixo2 = long.Parse(GetValueRow(row, "TelefoneFixo2"));
-                cliente.Celular1 = long.Parse(GetValueRow(row, "Celular1"));
-                cliente.Celular2 = long.Parse(GetValueRow(row, "Celular2"));
+                listaTelefones.Add(GetValueRow(row, "TelefoneFixo1"));
+                listaTelefones.Add(GetValueRow(row, "TelefoneFixo2"));
+                listaTelefones.Add(GetValueRow(row, "Celular1"));
+                listaTelefones.Add(GetValueRow(row, "Celular2"));
+                cliente.listaTelefones = listaTelefones;
+
                 cliente.DataRegistro = DateTime.Parse(GetValueRow(row, "DataRegistro"));
+                               
 
                 listaClientes.Add(cliente);
             }
@@ -88,6 +91,6 @@ namespace CadastroClientes.AcessoDados.Repositorio
 
         private string GetValueRow(DataRow row, string nomeCampo) {
             return row[nomeCampo].ToString();
-        }
+        }        
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,8 +12,14 @@ namespace CadastroClientes.AcessoDados.BancoSql
 {
     public class BDMySql
     {
-        private readonly string _connectionString = "SERVER=ec2-54-207-22-211.sa-east-1.compute.amazonaws.com; PORT=3306; DATABASE=fadergs; UID=fadergs; PWD=fadergs;";
-        
+        private string _connectionString;
+        private string ConnectionString {
+            get { return ObterConnectionString(); }
+            set {
+                _connectionString = value;
+            }
+        }
+
         public void Executar(string ComandoSql) {
             MySqlConnection Conexao = Conectar();
             MySqlCommand Comando = new MySqlCommand();
@@ -34,7 +41,7 @@ namespace CadastroClientes.AcessoDados.BancoSql
             MySqlCommand Comando = new MySqlCommand();
 
             try {
-                Conexao = new MySqlConnection(_connectionString);
+                Conexao = new MySqlConnection(ConnectionString);
                 Comando.Connection = Conexao;
                 if (Conexao.State == ConnectionState.Closed)
                     Conexao.Open();
@@ -54,20 +61,37 @@ namespace CadastroClientes.AcessoDados.BancoSql
             DataSet DataSet;
 
             try {
-                Conexao = new MySqlConnection(_connectionString);
+                //Conexao = new MySqlConnection(ConnectionString);
+                Conexao = Conectar();
                 Comando = new MySqlCommand(ComandoSql, Conexao);
-                
+
                 DataAdapter = new MySqlDataAdapter(Comando);
                 DataSet = new DataSet();
                 DataTable = new DataTable();
                 DataAdapter.Fill(DataTable);
             } catch (Exception ex) {
                 MessageBox.Show(ex.Message);
-            } finally {
                 Conexao.Close();
+            } finally {               
             }
 
             return DataTable;
+        }
+
+        private string ObterConnectionString() {
+            var txtArquivoCaminho = Path.Combine(Environment.CurrentDirectory, "Banco.txt");
+            var conString = "";
+
+            if (!File.Exists(txtArquivoCaminho)) return "";
+
+            Arquivos arquivos = new Arquivos();
+            string[] linhas = arquivos.ObterLinhasArquivoTXT(txtArquivoCaminho);
+
+            foreach (var linha in linhas) {
+                conString = $"{conString}{linha}";
+            }
+
+            return conString;
         }
     }
 }

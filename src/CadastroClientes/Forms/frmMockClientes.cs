@@ -53,10 +53,10 @@ namespace CadastroClientes.Forms
             frmCadClientes.txtLogradouro.Text = cliente.Logradouro;
             frmCadClientes.txtComplemento.Text = cliente.Complemento;
             frmCadClientes.txtNumero.Text = cliente.Numero.ToString();
-            frmCadClientes.txtTelefone1.Text = cliente.TelefoneFixo1.ToString();
-            frmCadClientes.txtTelefone2.Text = cliente.TelefoneFixo2.ToString();
-            frmCadClientes.txtCelular1.Text = cliente.Celular1.ToString();
-            frmCadClientes.txtCelular2.Text = cliente.Celular2.ToString();
+            frmCadClientes.txtTelefone1.Text = cliente.listaTelefones[0];
+            frmCadClientes.txtTelefone2.Text = cliente.listaTelefones[1];
+            frmCadClientes.txtCelular1.Text = cliente.listaTelefones[2];
+            frmCadClientes.txtCelular2.Text = cliente.listaTelefones[3];
             frmCadClientes.Show();
         }
     }

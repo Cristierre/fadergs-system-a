@@ -2,9 +2,6 @@
 using CadastroClientes.Entidades;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CadastroClientes.Aplicacao
 {
@@ -38,7 +35,7 @@ namespace CadastroClientes.Aplicacao
                 _notificacoes.Nova(ex.Message, "Erro ao excluir cliente");
             } finally {
                 _repositorioClientes = null;
-            }           
+            }
         }
 
         public void Incluir(Cliente cliente) {
@@ -76,13 +73,13 @@ namespace CadastroClientes.Aplicacao
             _notificacoes = null;
 
             return listaClientes;
-        }
+        }                
 
         public bool CadastroValido(string nome, string sexo, string cpf, string pais, string estado, string cidade, string bairro, string cep, string logradouro, string complemento, string numero, string celular1) {
             _notificacoes = new Notificacoes();
             bool valido = true;
 
-            if (string.IsNullOrEmpty(nome)) valido = false;            
+            if (string.IsNullOrEmpty(nome)) valido = false;
             if (string.IsNullOrEmpty(sexo)) valido = false;
             if (string.IsNullOrEmpty(cpf)) valido = false;
             if (string.IsNullOrEmpty(pais)) valido = false;
@@ -101,19 +98,19 @@ namespace CadastroClientes.Aplicacao
         }
 
         public void ExportarListParaCSV() {
-            Arquivos arquivos = new Arquivos();          
+            Arquivos arquivos = new Arquivos();
 
             try {
                 arquivos.ExportarListaParaCSV(Todos());
 
                 _notificacoes = new Notificacoes();
-                _notificacoes.Nova("Arquivo Exportado com Sucesso!", "Arquivo CSV");              
+                _notificacoes.Nova("Arquivo Exportado com Sucesso!", "Arquivo CSV");
             } catch (Exception ex) {
                 _notificacoes = new Notificacoes();
                 _notificacoes.Nova(ex.Message, "Erro ao exportar arquivo .CSV!");
             }
 
-            arquivos = null; 
+            arquivos = null;
             _notificacoes = null;
         }
     }

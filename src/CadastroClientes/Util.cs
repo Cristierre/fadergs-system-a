@@ -54,7 +54,7 @@ namespace CadastroClientes.Aplicacao
             }
             notificacoes = null;
 
-            return "";
+            return "";           
         }
 
         public static void CarregarComboEstadoCivil(ComboBox comboEstadoCivil) {
@@ -66,7 +66,7 @@ namespace CadastroClientes.Aplicacao
         }
 
         public static void HandleNotificacoesEvent(object sender, NotificacoesEventArgs e) {
-            MessageBox.Show(e.Mensagem, e.Titulo);
+            MessageBox.Show(e.Mensagem,e.Titulo);
         }
     }
 }

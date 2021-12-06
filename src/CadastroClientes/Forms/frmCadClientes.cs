@@ -4,12 +4,8 @@ using CadastroClientes.Enumerados;
 using CadastroClientes.Forms;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CadastrodeClientes
@@ -59,6 +55,8 @@ namespace CadastrodeClientes
         }
 
         private void btnSalvar_Click(object sender, EventArgs e) {
+            Clientes clientes = new Clientes();
+
             string estadoCivil = "";
             try {
                 estadoCivil = ObterEstadoCivil();
@@ -69,8 +67,10 @@ namespace CadastrodeClientes
             _sexo = Util.ObterSexoSelecionado(this.gbSexo);
             if (Valido()) {
                 Salvar();
-                ExportarCVS();
+                clientes.ExportarListParaCSV();
             }
+
+            clientes = null;
         }
 
         private void btnExcluir_Click(object sender, EventArgs e) {
@@ -101,7 +101,10 @@ namespace CadastrodeClientes
         }
 
         private void btnExportarCSV_Click(object sender, EventArgs e) {
-            ExportarCVS();
+            Clientes clientes = new Clientes();
+            clientes.ExportarListParaCSV();
+
+            clientes = null;
         }
 
         #region Metodos
@@ -116,6 +119,7 @@ namespace CadastrodeClientes
 
         private Cliente Novo() {
             Cliente cliente = new Cliente();
+            List<string> listaTelefones = new List<string>();
 
             string estCivil = ObterEstadoCivil();
 
@@ -134,11 +138,12 @@ namespace CadastrodeClientes
             cliente.Logradouro = txtLogradouro.Text;
             cliente.Complemento = txtComplemento.Text;
             cliente.Numero = Convert.ToInt32(txtNumero.Text);
-            cliente.TelefoneFixo1 = long.Parse(txtTelefone1.Text);
-            cliente.TelefoneFixo2 = long.Parse(txtTelefone2.Text);
-            cliente.Celular1 = long.Parse(txtCelular1.Text);
-            cliente.Celular2 = long.Parse(txtCelular2.Text);
+            listaTelefones.Add(txtTelefone1.Text);
+            listaTelefones.Add(txtTelefone2.Text);
+            listaTelefones.Add(txtCelular1.Text);
+            listaTelefones.Add(txtCelular2.Text);
             cliente.DataRegistro = Util.ObterDataAtual();
+            cliente.listaTelefones = listaTelefones;
 
             return cliente;
         }
@@ -175,21 +180,18 @@ namespace CadastrodeClientes
                 frmBuscaClientes.grid.DataSource = listaClientesFiltro;
                 frmBuscaClientes.Show();
 
+                int nlinhas = 0;
+                foreach (var cliente in listaClientesFiltro) {
+                    frmBuscaClientes.CarregarListaTelefone(cliente.listaTelefones, nlinhas);
+                    nlinhas = +1;
+                }
             }
 
             clientes = null;
             listaClientes = null;
         }
 
-        private void ExportarCVS() {
-            Clientes clientes = new Clientes();
-            clientes.ExportarListParaCSV();
-
-            clientes = null;
-        }
-
         private void Limpar() {
-            this.IdCliente = 0;
             this.EstadoCivil = "";
             txtNome.Clear();
             mtxtDataNascimento.Clear();
@@ -209,7 +211,6 @@ namespace CadastrodeClientes
             txtTelefone2.Clear();
             txtCelular1.Clear();
             txtCelular2.Clear();
-            lblDataRegistro.Text = "";
         }
 
         #endregion
