@@ -36,6 +36,11 @@ namespace CadastroClientes.Forms
 
                 frmCadClientes.IdCliente = int.Parse(grid.Rows[grid.CurrentRow.Index].Cells[0].Value?.ToString());
                 frmCadClientes.txtNome.Text = grid.Rows[grid.CurrentRow.Index].Cells[1].Value?.ToString();
+
+                DateTime dataNasc = DateTime.Parse(grid.Rows[grid.CurrentRow.Index].Cells[2].Value?.ToString());
+                TimeZoneInfo horaBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+                frmCadClientes.mtxtDataNascimento.Text = TimeZoneInfo.ConvertTimeFromUtc(dataNasc, horaBrasilia).ToShortDateString();
+
                 frmCadClientes.mtxtDataNascimento.Text = DateTime.Parse(grid.Rows[grid.CurrentRow.Index].Cells[2].Value?.ToString()).ToShortDateString();
                 frmCadClientes.EstadoCivil = eEstCivil.ToString();
                 Util.MarcarCampoSexo(frmCadClientes.gbSexo, Util.ObterSexoExtenso(grid.Rows[grid.CurrentRow.Index].Cells[4].Value?.ToString()));

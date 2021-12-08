@@ -5,6 +5,7 @@ using CadastroClientes.Forms;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Globalization;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -125,7 +126,8 @@ namespace CadastrodeClientes
 
             cliente.Id = this.IdCliente;
             cliente.NomeCompleto = txtNome.Text;
-            cliente.DataNascimento = DateTime.Parse(mtxtDataNascimento.Text);
+            TimeZoneInfo horaBrasilia = TimeZoneInfo.FindSystemTimeZoneById("E. South America Standard Time");
+            cliente.DataNascimento = TimeZoneInfo.ConvertTimeFromUtc(DateTime.Parse(mtxtDataNascimento.Text), horaBrasilia); 
             cliente.EstadoCivil = (int)Enum.Parse(typeof(eEstadoCivil), estCivil, true);
             cliente.Sexo = _sexo;
             cliente.RG = long.Parse(txtRG.Text);
@@ -138,10 +140,10 @@ namespace CadastrodeClientes
             cliente.Logradouro = txtLogradouro.Text;
             cliente.Complemento = txtComplemento.Text;
             cliente.Numero = Convert.ToInt32(txtNumero.Text);
-            listaTelefones.Add(txtTelefone1.Text);
-            listaTelefones.Add(txtTelefone2.Text);
-            listaTelefones.Add(txtCelular1.Text);
-            listaTelefones.Add(txtCelular2.Text);
+            listaTelefones.Add(txtTelefone1?.Text);
+            listaTelefones.Add(txtTelefone2?.Text);
+            listaTelefones.Add(txtCelular1?.Text);
+            listaTelefones.Add(txtCelular2?.Text);
             cliente.DataRegistro = Util.ObterDataAtual();
             cliente.listaTelefones = listaTelefones;
 
